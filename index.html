@@ -160,7 +160,7 @@
 <body>
     <div class="container">
         <h2>🔍 Periksa Status Absensi</h2>
-        <form id="statusForm" action="check_status.php" method="post">
+        <form id="statusForm">
             <div class="input-group">
                 <label for="check_whatsapp">📱 Nomor WhatsApp</label>
                 <input type="text" id="check_whatsapp" name="check_whatsapp" 
@@ -171,7 +171,7 @@
             </div>
             <button type="submit">Periksa Status Sekarang →</button>
         </form>
-        <div id="resultContainer" style="margin-top: 20px; display: none;"></div>
+        <div id="result" style="margin-top: 20px; display: none; padding: 15px; background: rgba(255,255,255,0.1); border-radius: 12px;"></div>
     </div>
     
     <!-- Decorative elements -->
@@ -179,40 +179,41 @@
     <div class="decorative" style="bottom: 10%; right: 5%;"></div>
 
     <script>
-        document.getElementById('statusForm').addEventListener('submit', function(e) {
+        document.getElementById('statusForm').addEventListener('submit', async function(e) {
             e.preventDefault();
             
             const whatsappNumber = document.getElementById('check_whatsapp').value;
-            const resultContainer = document.getElementById('resultContainer');
+            const resultDiv = document.getElementById('result');
             
-            // Ganti URL ini dengan API endpoint Anda (misalnya API berbasis Vercel Serverless Function)
-            fetch('/api/check-status', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({ whatsapp: whatsappNumber })
-            })
-            .then(response => response.json())
-            .then(data => {
-                resultContainer.style.display = 'block';
-                resultContainer.innerHTML = `
-                    <div style="background: rgba(255,255,255,0.1); padding: 15px; border-radius: 12px; border-left: 4px solid #ffc107;">
-                        <h3 style="margin-top: 0; color: #ffc107;">Status Absensi:</h3>
-                        <p>${data.message || 'Data tidak ditemukan'}</p>
-                    </div>
-                `;
-            })
-            .catch(error => {
-                resultContainer.style.display = 'block';
-                resultContainer.innerHTML = `
-                    <div style="background: rgba(255,0,0,0.1); padding: 15px; border-radius: 12px; border-left: 4px solid #ff5252;">
-                        <h3 style="margin-top: 0; color: #ff5252;">Error:</h3>
-                        <p>Terjadi kesalahan saat memeriksa status. Silakan coba lagi.</p>
-                    </div>
-                `;
+            resultDiv.innerHTML = 'Memeriksa status...';
+            resultDiv.style.display = 'block';
+            
+            try {
+                console.log('Mengirim request ke API...');
+                console.log('Nomor WhatsApp:', whatsappNumber);
+                
+                const response = await fetch('/api/check-status', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ whatsapp: whatsappNumber })
+                });
+                
+                console.log('Response status:', response.status);
+                
+                const data = await response.json();
+                console.log('Response data:', data);
+                
+                if (data.success) {
+                    resultDiv.innerHTML = `<p style="color: #4ade80;">✅ ${data.message}</p>`;
+                } else {
+                    resultDiv.innerHTML = `<p style="color: #f87171;">❌ ${data.message}</p>`;
+                }
+            } catch (error) {
                 console.error('Error:', error);
-            });
+                resultDiv.innerHTML = '<p style="color: #f87171;">Terjadi kesalahan saat memeriksa status. Silakan coba lagi.</p>';
+            }
         });
     </script>
 </body>
