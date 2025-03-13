@@ -1,0 +1,180 @@
+<!-- File: index.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <title>Periksa Status Absensi</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #2563eb;
+            --secondary: #60a5fa;
+            --accent: #f59e0b;
+        }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            color: #fff;
+            padding: 20px;
+            position: relative;
+            overflow-x: hidden;
+        }
+        
+        body::before {
+            content: '';
+            position: absolute;
+            top: -50px;
+            left: -50px;
+            right: -50px;
+            bottom: -50px;
+            background: linear-gradient(45deg, 
+                rgba(255,255,255,0.05) 0%,
+                rgba(255,255,255,0.1) 100%);
+            z-index: -1;
+            animation: gradientShift 20s ease infinite;
+        }
+
+        @keyframes gradientShift {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .container {
+            width: 100%;
+            margin: 0;
+            padding: 1rem;
+            border-radius: 15px;
+        }
+
+        h2 {
+            font-weight: 700;
+            margin-bottom: 2rem;
+            background: linear-gradient(45deg, #ffc107, #f59e0b);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-size: 2rem;
+            position: relative;
+            padding-bottom: 0.5rem;
+        }
+
+        h2::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 60px;
+            height: 3px;
+            background: linear-gradient(90deg, transparent, #ffc107, transparent);
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .input-group {
+            position: relative;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+            color: #ffc107;
+            font-size: 0.9rem;
+            padding-left: 0.5rem;
+        }
+
+        input {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid rgba(255,255,255,0.2);
+            border-radius: 12px;
+            font-size: 14px;
+            background: rgba(255,255,255,0.9);
+            color: #1e3c72;
+            transition: all 0.3s ease;
+        }
+
+        input:focus {
+            outline: none;
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px rgba(245, 158, 11, 0.3);
+        }
+
+        input::placeholder {
+            color: #94a3b8;
+        }
+
+        button {
+            background: linear-gradient(45deg, #ffc107, #f59e0b);
+            color: #1e3c72;
+            border: none;
+            padding: 14px;
+            font-size: 15px;
+            font-weight: 700;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-top: 1rem;
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(245, 158, 11, 0.3);
+        }
+
+        @media (min-width: 600px) {
+            .container {
+                max-width: 500px;
+                padding: 2rem;
+            }
+        }
+
+        .decorative {
+            position: absolute;
+            pointer-events: none;
+        }
+
+        .decorative-circle {
+            width: 100px;
+            height: 100px;
+            background: rgba(255,255,255,0.05);
+            border-radius: 50%;
+            filter: blur(20px);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>🔍 Periksa Status Absensi</h2>
+        <form action="check_status.php" method="post">
+            <div class="input-group">
+                <label for="check_whatsapp">📱 Nomor WhatsApp</label>
+                <input type="text" id="check_whatsapp" name="check_whatsapp" 
+                       placeholder="Contoh: 081234567890" 
+                       pattern="[0-9]{10,13}" 
+                       title="Masukkan nomor WhatsApp (10-13 digit angka)" 
+                       required>
+            </div>
+            <button type="submit">Periksa Status Sekarang →</button>
+        </form>
+    </div>
+    
+    <!-- Decorative elements -->
+    <div class="decorative" style="top: 10%; left: 5%;"></div>
+    <div class="decorative" style="bottom: 10%; right: 5%;"></div>
+</body>
+</html>
